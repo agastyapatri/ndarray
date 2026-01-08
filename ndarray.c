@@ -88,6 +88,7 @@ void ndarray_free(ndarray* arr){
 
 
 
+
 ndarray* ndarray_zeroes(const int NDIMS, const size_t* SHAPE){
 	if(NDIMS > MAX_DIMS){
 		printf("Invalid NDIMS provided in ndarray_zeroes(); ensure NDIMS <= %d\n", MAX_DIMS);
@@ -122,6 +123,38 @@ ndarray* ndarray_zeroes(const int NDIMS, const size_t* SHAPE){
 }
 
 
+ndarray* ndarray_linspace(double start, double end, size_t num){
+	if(end <= start){
+		NDARRAY_ERROR("Ensure that end > start for the data range in ndarray_linspace()\n");
+	}
+	size_t shape[1] = {num};
+	int ndims = 1;
+	ndarray* out = ndarray_alloc(ndims, shape);
+	double delta = (end - start)/num;
+	for(size_t i = 0; i < out->size; i++){
+		out->data[i] = start;
+		start += delta;
+	}
+	return out;
+}
+
+ndarray* ndarray_arange(double start, double end, double delta){
+	if(end <= start){
+		NDARRAY_ERROR("Ensure that end > start for the data range in ndarray_arange()\n");
+	}
+	// ndarray* out = NULL;
+	size_t num_els = ceil((end-start)/delta);
+	size_t shape[1] = {num_els};
+	int ndims = 1;
+	ndarray* out = ndarray_alloc(ndims, shape);
+	for(size_t i = 0; i < out->size; i++){
+		out->data[i] = start;
+		start += delta;
+	}
+	return out;
+}
+
+
 ndarray* ndarray_ones(const int NDIMS, const size_t* SHAPE){
 	ndarray* arr = ndarray_alloc(NDIMS, SHAPE);
 	for(size_t i = 0; i < arr->size; i++)
@@ -139,12 +172,9 @@ void ndarray_print(const ndarray* arr){
 	}
 	printf("ndarray[");
 	for(size_t i = 0; i < arr->size; i++){
-		printf("%lf ", arr->data[i]);
+		printf("%lf", arr->data[i]);
+		if(i != arr->size-1) printf(", ");
 	}
-
-
-
-
 	printf("]\n");
 } 
 

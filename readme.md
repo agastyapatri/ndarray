@@ -1,4 +1,9 @@
 #   **N-Dimensional arrays in C**
+
+NOTE: This project is currently on ice. I will come back to this in the near future
+
+
+
 The core struct of this library is the `ndarray`; a tiny implementation of the `numpy.ndarray`. 
 The eventual goal of this project is to allow me to train tiny neural networks with a minimal set of tools - tensors, autograd, optim, and some accoutrements.
 
@@ -26,7 +31,7 @@ The eventual goal of this project is to allow me to train tiny neural networks w
     
     -   transpose 
     -   view 
-    -   reshape
+    -   ~reshape~
     -   flatten
     -   inverse??
 
@@ -38,6 +43,7 @@ The eventual goal of this project is to allow me to train tiny neural networks w
 
 ##  What I'm dealing with right now.
 
-When an ndarray is created which is a view of another , i.e owns the same data as an original ndarray, calling `ndarray_free()` on one should lead to `NDARRAY_NULL()` being true for the other. Why is that not the case??
+-   When an ndarray is created which is a view of another , i.e owns the same data as an original ndarray, calling `ndarray_free()` on one should lead to `NDARRAY_NULL()` being true for the other. Why is that not the case??
+-   How do I implement `ndarray_transpose()`? 
 
 

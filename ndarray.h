@@ -7,11 +7,6 @@
 #define MAX_DIMS 8
 #endif
 
-
-/************************************************************
- * NDARRAY ALLOCATION AND POPULATION
-************************************************************/
-
 /*
 	The core n dimensional array 
 	@param int ndims - the number of indices requried to access the elements of the array;
@@ -48,6 +43,9 @@ void ndarray_print(const ndarray* arr);
 void ndarray_print_shape(const ndarray* arr);
 void ndarray_free(ndarray* arr);
 
+ndarray* ndarray_linspace(double start, double end, size_t num);
+ndarray* ndarray_arange(double start, double end, double delta);
+
 /*
 	Calculates the index offset into the flat data buffer of a ndarray.
 	Note that the number of indices provided MUST be equal to the ndims of the target ndarray
@@ -68,15 +66,12 @@ ndarray* ndarray_random_normal(const int NDIMS, const size_t* SHAPE, const doubl
 
 
 
-
-/************************************************************
- * NDARRAY ARITHMETIC
-************************************************************/
-
 //	Elementwise addition
 void ndarray_add(ndarray* inp1, ndarray* inp2, ndarray* outs);
+
 //	Elementwise subtraction
 void ndarray_sub(ndarray* inp1, ndarray* inp2, ndarray* outs);
+
 //	Elementwise multiplication
 void ndarray_hadamard(ndarray* inp1, ndarray* inp2, ndarray* outs);
 
@@ -87,27 +82,13 @@ void ndarray_map(ndarray* arr, double (*function)(double x));
 //	Mapping arithmetic functions to an output ndarray 
 void ndarray_map_arithmetic(ndarray* inp1, ndarray* inp2, ndarray* output, double (*function)(double x, double y));
 
-
 //	Scales the elements of the ndarray by a scalar value
 void ndarray_scale(ndarray* arr, double scalar);
-
-
-/************************************************************
- * TODO: NDARRAY MANIPULATION
-************************************************************/
 
 /*	
 	Returns a ndarray with a view of the original data. Note that both the reshaped and the original ndarrays now own the data. 
  */
 ndarray* ndarray_reshape(ndarray* arr, int new_ndim, size_t* new_shape);
-
-
-/*	
-	Swaps the axes of a 
- */
-ndarray* ndarray_transpose(ndarray* arr, int* axes);
-void ndarray_view();
-void ndarray_flatten();
 
 
 
@@ -125,6 +106,9 @@ void ndarray_flatten();
 */
 ndarray* ndarray_hstack(ndarray** arrs, int num);
 ndarray* ndarray_vstack(ndarray** arrs, int num);
+ndarray* ndarray_transpose(ndarray* arr, int* axes);
+void ndarray_view();
+void ndarray_flatten();
 /*
 	Concatentating a sequence of ndarrays about any axis.
 */
