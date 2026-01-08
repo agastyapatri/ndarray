@@ -131,7 +131,5 @@ ndarray* ndarray_vstack(ndarray** arrs, int num);
 ndarray* ndarray_concat(ndarray** arrs, int num, int axis);
 
 
-//	TODO
-void ndarray_reshape_inplace(ndarray* arr, int new_ndim, size_t* new_shape);
 
 #endif
