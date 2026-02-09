@@ -1,11 +1,21 @@
 #ifndef NDARRAY_H
 #define NDARRAY_H
-#include <stdatomic.h>
 #include <stddef.h>
 
 #ifndef MAX_DIMS
 #define MAX_DIMS 8
 #endif
+
+#ifndef ALIGNMENT
+#define ALIGNMENT 32
+#endif
+
+
+
+
+#define NDARRAY_NULL(arr) (arr == NULL) ? 1 : 0
+#define NDARRAY_ERROR(msg)	perror(msg); \
+							exit(1);
 
 /*
 	The core n dimensional array 
@@ -24,20 +34,21 @@ typedef struct ndarray {
 	double* data;
 } ndarray;
 
+static inline bool NDARRAY_EQUAL_SHAPE(const ndarray* inp1, const ndarray* inp2){
+	if(inp1->ndims != inp2->ndims) return false;
+	for(int i = 0; i < inp1->ndims; i++){
+		if(inp1->shape[i] != inp2->shape[i]){
+			return false;
+		}
+	}
+	return true;
 
-/*
-	Returns true if either the target ndarray or its data buffer are NULL.
- */
-bool NDARRAY_NULL(const ndarray* arr);
+}
 
-/*
-	Returns true if the shapes and the dimensionality of two ndarrays are equal.
- */
-bool NDARRAY_EQUAL_SHAPE(const ndarray* inp1, const ndarray* inp2);
+ndarray* ndarray_alloc(const int NDIMS, const size_t* SHAPE); 
 
-void NDARRAY_ERROR(char* msg);
 
-ndarray* ndarray_alloc(const int NDIMS, const size_t* SHAPE); ndarray* ndarray_ones(const int NDIMS, const size_t* SHAPE);
+ndarray* ndarray_ones(const int NDIMS, const size_t* SHAPE);
 ndarray* ndarray_zeroes(const int NDIMS, const size_t* SHAPE);
 void ndarray_print(const ndarray* arr);
 void ndarray_print_shape(const ndarray* arr);

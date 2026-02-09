@@ -7,31 +7,7 @@
 // #include <math.h>
 
 
-bool NDARRAY_NULL(const ndarray* arr){
-	return (arr==NULL || arr->data==NULL) ? true : false;
-}
-bool NDARRAY_EQUAL_SHAPE(const ndarray* inp1, const ndarray* inp2){
-	if(NDARRAY_NULL(inp1) || NDARRAY_NULL(inp2)){
-		NDARRAY_ERROR("NULL argument(s) in NDARRAY_EQUAL_SHAPE()\n");
-	}
-	if(inp1->ndims != inp2->ndims) return false;
-	for(int i = 0; i < inp1->ndims; i++){
-		if(inp1->shape[i] != inp2->shape[i]){
-			return false;
-		}
-	}
-	return true;
-}
-
-void NDARRAY_ERROR(char* msg){
-	perror(msg);
-	exit(EXIT_FAILURE);
-}
-
 void ndarray_print_shape(const ndarray *arr){
-	if(NDARRAY_NULL(arr)){
-		NDARRAY_ERROR("NULL argument in ndarray_print_shape()\n");
-	}
 	printf("(");
 	for(int i = 0; i < arr->ndims; i++){
 		printf("%li", arr->shape[i]);
@@ -41,14 +17,9 @@ void ndarray_print_shape(const ndarray *arr){
 }
 
 ndarray* ndarray_alloc(const int NDIMS, const size_t* SHAPE){
-	if(NDIMS > MAX_DIMS){
-		printf("Invalid NDIMS provided in ndarray_alloc(); ensure NDIMS <= %d\n", MAX_DIMS);
-		exit(EXIT_FAILURE);
-	}
 	ndarray* arr = (ndarray*)malloc(sizeof(ndarray));
-	if(!arr){
-		NDARRAY_ERROR("Invalid memory allocation in ndarray_alloc()\n");
-	}
+	if(!arr)
+		return NULL;
 
 	arr->ref_count = (int*)calloc(1, sizeof(int));
 	(*(arr->ref_count))++;
@@ -66,17 +37,13 @@ ndarray* ndarray_alloc(const int NDIMS, const size_t* SHAPE){
 	}
 
 	arr->data = (double*)malloc(arr->size*sizeof(double));
-	if(!arr->data){
-		perror("Invalid memory allocation for ndarray.data in ndarray_alloc()\n");
-		exit(EXIT_FAILURE);
-	}
+	// arr->data = (double*)aligned_alloc(ALIGNMENT, )
+	if(!arr->data)
+		return NULL;
 	return arr;
 }
 
 void ndarray_free(ndarray* arr){
-	if(NDARRAY_NULL(arr)){
-		NDARRAY_ERROR("NULL argument in ndarray_free()\n");
-	}
 	(*(arr->ref_count))--;
 	if(*(arr->ref_count) == 0){
 		free(arr->ref_count);
